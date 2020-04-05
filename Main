@@ -1,0 +1,70 @@
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author Azul Barros
+ */
+public class TicTacToe {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        
+        final int USER = 1;
+        final int COMP = 0;
+        Constructor game = new Constructor();
+        
+        int counter = 0;
+        game.startBoard();
+        System.out.println(game.printBoard());
+        game.setStartPlayer(); game.setTokens();
+        switch (game.getStartPlayer()) {
+            case USER:
+                JOptionPane.showMessageDialog(null,"You go first!" + " You are "
+                       + game.getUserToken() + ".");
+                game.userCoordinates();
+                game.setPlayer(game.getUserRow(), game.getUserColumn(),
+                       game.getUserToken());
+                game.setSecondPlayer(COMP);
+                counter++;
+                break;
+            case COMP:
+                JOptionPane.showMessageDialog(null,"The computer goes first." +
+                        " You are " + game.getUserToken() + ".");
+                game.computerCoordinates();
+                game.setPlayer(game.getCompRow(), game.getCompColumn(),
+                        game.getComputerToken());
+                System.out.println(game.printBoard());
+                game.setSecondPlayer(USER);
+                counter++;
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Error. Restart.");
+                break;
+            }
+            
+            while (game.checkWinner() && (counter < 9)) {
+                if (game.getStartPlayer() == COMP) {
+                    game.computerCoordinates();
+                    game.setPlayer(game.getCompRow(), game.getCompColumn(),
+                        game.getComputerToken());
+                    System.out.println(game.printBoard());
+                    game.setSecondPlayer(USER);
+                    counter++;
+                } else if (game.getStartPlayer() == USER) {
+                    game.userCoordinates();
+                    game.checkUserCoordinates (); 
+                    game.setPlayer(game.getUserRow(), game.getUserColumn(),
+                        game.getUserToken());
+                    System.out.println(game.printBoard());
+                    game.setSecondPlayer(COMP);
+                    counter++;
+                }
+            }
+            if ((counter == 9) && (game.checkWinner())) {
+                JOptionPane.showMessageDialog(null, "It's a tie!");
+            }
+        }
+    }
