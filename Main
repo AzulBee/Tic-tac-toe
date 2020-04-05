@@ -6,11 +6,7 @@ import javax.swing.JOptionPane;
  */
 public class TicTacToe {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
         
         final int USER = 1;
         final int COMP = 0;
