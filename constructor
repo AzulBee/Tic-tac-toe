@@ -1,0 +1,283 @@
+import javax.swing.JOptionPane;
+import java.util.Random;
+
+public class Constructor {
+    
+    private final int USER = 1;
+    private final int COMP = 0; // These will be used to decide who goes first ^
+    private final int ROW = 3;  // Used to make the board array
+    private final int COLUMN = 3; // Used to make the board aray
+    private final Random RANDOM = new Random (); // Used to generate random nums
+    private int startPlayer; // Holds start player value (0 or 1)
+    private int userRow; 
+    private int userColumn;
+    private int compRow;
+    private int compColumn;
+    private int playAgain = JOptionPane.YES_NO_OPTION;
+    private String spaces = "   "; // Used to add the spaces to the board & 
+                                   //check for empty spaces
+    private String userToken;
+    private String computerToken; // Will make either token equal to "X" or "O"
+    private String userName = "No Name"; // Will hold the name of user
+    private String [][] board = new String [ROW][COLUMN]; // 2D array for board
+    
+    /**
+     * 
+     * @return userToken
+     */
+    public String getUserToken () {
+        return userToken;
+    }
+    /**
+     * 
+     * @return computerToken
+     */
+    public String getComputerToken () {
+        return computerToken;
+    }
+    /**
+     * 
+     * @return userName
+     */
+    public String getUserName () {
+        return userName;
+    }
+    /**
+     * Passes the value into main when needed
+     * @return userRow
+     */
+    public int getUserRow() {
+        return userRow;
+    }
+    /**
+     * Passes the value into main when needed
+     * @return userColumn
+     */
+    public int getUserColumn() {
+        return userColumn;
+    }
+    /**
+     * 
+     * @return compColumn
+     */
+    public int getCompColumn () {
+        return compColumn;
+    }
+    /**
+     * 
+     * @return compRow
+     */
+    public int getCompRow () {
+        return compRow;
+    }
+    /**
+     * 
+     * @return startPlayer
+     */
+    public int getStartPlayer () {
+        return startPlayer;
+    }
+    /**
+     * Generates a number between 0 and 1
+     * Has a 50/50 probability for either or
+     */
+    public void setStartPlayer () {
+        startPlayer = RANDOM.nextInt(2); 
+    }
+    /**
+     * Sets start player to the next player (0 or 1) from @param.
+     * @param num 
+     */
+    public void setSecondPlayer (int num) {
+        startPlayer = num;
+    }
+    /**
+     * Sets who is X and O based on the setStartPlayer method 
+     */
+    public void setTokens () {
+        if (startPlayer == USER) {
+            userToken = " X ";
+            computerToken = " O ";
+        } else if (startPlayer == COMP){
+            userToken = " O ";
+            computerToken = " X ";
+        } else {
+            JOptionPane.showMessageDialog(null, "Error. Restart.");
+        }
+        
+    }
+    /**
+     * Gets users choice of row and column positions
+     */
+    public void userCoordinates () {
+        userRow = Integer.parseInt(JOptionPane.showInputDialog(null,
+                "Enter number for row (0-2): "));
+        userColumn = Integer.parseInt(JOptionPane.showInputDialog(null,
+                "Enter number for column (0-2): "));
+        
+    }/**
+     * Checks if the spot picked to add token is available, if it is then adds 
+     * token. If spot is unavailable prompts to add different coordinates.
+     */
+    public void checkUserCoordinates () {
+        if (board[userRow][userColumn].matches(spaces)){
+                board[userRow][userColumn] = userToken;
+            } else {
+                JOptionPane.showMessageDialog(null, "Invalid move. Try again.");
+                userCoordinates();
+            }
+    }
+    /**
+     * Generates a random number between 0 and 2 for row
+     * Generates a random number between 0 and 2 for column
+     */
+    public void computerCoordinates () {
+        compRow = RANDOM.nextInt(3);
+        compColumn = RANDOM.nextInt(3);
+        if (board[compRow][compColumn].matches(spaces)) {
+            board[compRow][compColumn] = computerToken;
+        } else {
+            computerCoordinates();
+        }
+    }
+    /**
+     * Initializes board
+     */
+    public void startBoard () {
+        // Row loop
+        for (int i = 0; i < ROW; i++){
+            // Column loop
+            for (int j = 0; j < COLUMN; j++){
+                board[i][j] = "   "; 
+            }
+        }
+    }
+    /**
+     * Uses nested loop to go through all elements and print a board
+     * @return boardString
+     */
+     public String printBoard(){
+        String boardString = "";
+       
+        for (int i = 0; i < ROW; i++){
+            if (i != 0)
+                boardString += "\n---|---|---\n";
+            for (int j = 0; j < COLUMN; j++){
+                if (j != COLUMN - 1) {
+                    boardString += board[i][j] + "|";  
+                } else {
+                    boardString += board[i][j];
+                }
+            }
+        }
+        boardString += "\n";
+        return boardString;
+    }
+     /**
+      *Checks if @param's are valid. Makes board equal to user or computer move.
+      * @param row
+      * @param column
+      * @param player
+      * @return board[row][column]
+      */
+    public String setPlayer (int row, int column, String player) {
+        if ((row >= 0 && row <= 2) && (column >= 0 && column <= 2)) {
+            board[row][column] = player;
+        } else {
+            JOptionPane.showMessageDialog(null, "Invalid movee. Try again.");
+            userCoordinates();
+        }
+        return board[row][column];
+    }
+    /**
+     * Checks if game is over
+     * @return boolean true or false
+     */
+    public boolean gameOver() {
+        int i = 0;
+        int j = 0;
+        //Checks rows
+        while (i < ROW) {
+            if (!board[i][0].matches(spaces) && board[i][0].equals(board[i][1])
+                    && board[i][1].equals(board[i][2])){
+                        return true;
+                    }
+            }
+        //Checks columns
+        while (j < COLUMN) {
+            if (!board[0][j].matches(spaces) && board[0][j].equals(board[1][j])
+                    && board[1][j].equals(board[2][j])){
+                return true;
+            }
+        }
+        // Checking diagonally 
+        if (!board[0][0].matches(spaces) && board[0][0].equals(board[1][1])
+                && board[1][1].equals(board[2][2])){
+            return true;
+        }
+        if (!board[0][2].matches(spaces) && board[0][2].equals(board[1][1])
+                && board[1][1].equals(board[2][0])){
+            return true;
+        }
+        
+        // If no one wins
+        return false;
+    }
+    /**
+     * Checks if there is a winner or not, displays results (winner or tie).
+     * @return boolean false or true
+     */
+    public boolean checkWinner () {
+        for (int i = 0; i < board.length; i++) {
+            // Checks vertically 
+            if (board[i][0].equals(board[i][1]) && board[i][1].equals
+                (board[i][2]) && !board[i][0].matches(spaces)) {
+                if (board[i][0].equals(userToken)) {
+                    JOptionPane.showMessageDialog(null, "Congratulations "
+                            + userName + "! You won");
+                    return false;
+                } else {
+                    JOptionPane.showMessageDialog(null, "The computer won!");
+                    return false;
+                }
+            }
+            // Checks horizontally
+            if (board[0][i].equals(board[1][i]) && board[1][i].equals
+                (board[2][i]) && !board[0][i].matches(spaces)) {
+                if (board[0][i].equals(userToken)) {
+                    JOptionPane.showMessageDialog(null, "Congratulations "
+                            + userName + "! You won");
+                    return false;
+                } else {
+                    JOptionPane.showMessageDialog(null, "The computer won!");
+                    return false;
+                }
+            }
+            // Checks diagonally
+            if (board[0][0].equals(board[1][1]) && board[1][1].equals
+                (board[2][2]) && !board[0][0].matches(spaces)){
+                if (board[0][0].equals(userToken)) {
+                    JOptionPane.showMessageDialog(null, "Congratulations "
+                            + userName + "! You won");
+                    return false;
+                } else {
+                    JOptionPane.showMessageDialog(null, "The computer won!");
+                    return false;
+                }
+            }
+            // Checks diagonally
+            if(board[0][2].equals(board[1][1])&& board[1][1].equals(board[2][0])
+                  && !board[0][2].matches(spaces)){
+                if (board[0][2].equals(userToken)) {
+                    JOptionPane.showMessageDialog(null, "Congratulations "
+                            + userName + "! You won");
+                    return false;
+                } else {
+                    JOptionPane.showMessageDialog(null, "The computer won!");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
