@@ -18,12 +18,10 @@ public class Constructor {
     private int userColumn;
     private int compRow;
     private int compColumn;
-    private int playAgain = JOptionPane.YES_NO_OPTION;
     private String spaces = "   "; // Used to add the spaces to the board & 
                                   // check for empty spaces
     private String userToken;
     private String computerToken; // Will make either token equal to "X" or "O"
-    private String userName = "No Name"; // Will hold the name of user
     private String [][] board = new String [ROW][COLUMN]; // 2D array for board
     
     /**
@@ -48,7 +46,7 @@ public class Constructor {
         return userName;
     }
     /**
-     * Passes the value into main when needed
+     *
      * @return userRow
      */
     public int getUserRow() {
