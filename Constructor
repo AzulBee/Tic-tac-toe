@@ -39,13 +39,6 @@ public class Constructor {
         return computerToken;
     }
     /**
-     * 
-     * @return userName
-     */
-    public String getUserName () {
-        return userName;
-    }
-    /**
      *
      * @return userRow
      */
